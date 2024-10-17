@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors, {CorsOptions} from 'cors';
 import path from 'path';
+import usersRouter from './routers/users';
+import cocktailsRouter from './routers/cocktails';
 
 const app = express();
 const port = 8000;
@@ -21,6 +23,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/fixtures', express.static(path.join(__dirname, 'public/fixtures')));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/users', usersRouter);
+app.use('/cocktails', cocktailsRouter)
 
 const run = async () => {
   await mongoose.connect('mongodb://localhost/cocktails');
