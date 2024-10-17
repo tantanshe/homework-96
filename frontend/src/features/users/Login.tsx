@@ -15,7 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [state, setState] = useState<LoginMutation>({
-    username: '',
+    email: '',
     password: '',
   });
 
@@ -81,10 +81,10 @@ const Login = () => {
           <Grid item>
             <TextField
               required
-              label="Username"
-              name="username"
-              autoComplete="current-username"
-              value={state.username}
+              label="Email"
+              name="email"
+              autoComplete="current-email"
+              value={state.email}
               onChange={inputChangeHandler}
             />
           </Grid>

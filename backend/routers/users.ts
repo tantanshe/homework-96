@@ -5,17 +5,19 @@ import * as bcrypt from 'bcrypt';
 import {randomUUID} from 'crypto';
 import {OAuth2Client} from 'google-auth-library';
 import config from '../config';
+import {imagesUpload} from '../multer';
 
 const usersRouter = express.Router();
 const googleClient = new OAuth2Client(config.google.clientID);
 
-usersRouter.post('/', async (req, res, next) => {
+usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
   try {
     const user = new User({
       email: req.body.email,
       password: req.body.password,
       token: randomUUID(),
-      displayName: req.body.displayName || 'Anonymous',
+      displayName: req.body.displayName,
+      avatar: req.file ? req.file.filename : null,
     });
 
     await user.save();
@@ -79,7 +81,7 @@ usersRouter.post('/google', async (req, res, next) => {
         password: crypto.randomUUID(),
         googleID: id,
         displayName,
-        avatar
+        avatar: avatar,
       });
     }
 

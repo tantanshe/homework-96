@@ -46,17 +46,27 @@ const AppToolbar = () => {
                 <Typography variant="h6" sx={{mr: 1}}>
                   Hello {user.displayName}!
                 </Typography>
-                <Avatar src={user.avatar} alt={user.displayName}/>
+                <Avatar
+                  src={user.avatar && user.avatar.startsWith('http') ? user.avatar : `http://localhost:8000/${user.avatar}`}
+                  alt={user.displayName}
+                />
               </Grid>
               <Grid container spacing={1} justifyContent="flex-end">
                 <Grid item>
-                  <Button component={NavLink} to="/addArtist" sx={buttonStyles}>
+                  <Button component={NavLink} to="/addCocktail" sx={buttonStyles}>
                     Add a cocktail
                   </Button>
                 </Grid>
-                <Button onClick={handleLogout} sx={buttonStyles}>
-                  Logout
-                </Button>
+                <Grid item>
+                  <Button component={NavLink} to="/myCocktails" sx={buttonStyles}>
+                    My cocktails
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button onClick={handleLogout} sx={buttonStyles}>
+                    Logout
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           ) : (

@@ -48,8 +48,8 @@ cocktailsRouter.post('/', auth, imagesUpload.single('image'), async (req: Reques
     if (!req.user) {
       return res.status(401).send({error: 'User not found.'});
     }
-    ``;
-    const cocktailMutation: CocktailMutation = {
+
+    const cocktailMutation = {
       name: req.body.name,
       image: req.file ? req.file.filename : null,
       recipe: req.body.recipe,
@@ -66,7 +66,6 @@ cocktailsRouter.post('/', auth, imagesUpload.single('image'), async (req: Reques
     if (error instanceof mongoose.Error.ValidationError) {
       return res.status(400).send(error);
     }
-
     return next(error);
   }
 });

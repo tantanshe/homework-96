@@ -6,6 +6,7 @@ import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {selectRegisterError, selectRegisterLoading} from './usersSlice';
 import {register} from './usersThunks';
+import FileInput from '../../UI/FileInput/FileInput';
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -14,13 +15,24 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [state, setState] = useState<RegisterMutation>({
-    username: '',
+    email: '',
     password: '',
     displayName: '',
+    avatar: null,
   });
 
   const getFieldError = (fieldName: string) => {
     return error?.errors[fieldName]?.message;
+  };
+
+  const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, files} = e.target;
+    if (files) {
+      setState((prevState) => ({
+        ...prevState,
+        [name]: files[0],
+      }));
+    }
   };
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,11 +43,19 @@ const Register = () => {
       [name]: value,
     }));
   };
-  const submitFormHandler = async (event: React.FormEvent) => {
 
+  const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    const formData = new FormData();
+    formData.append('email', state.email);
+    formData.append('password', state.password);
+    formData.append('displayName', state.displayName);
+    if (state.avatar) {
+      formData.append('avatar', state.avatar);
+    }
+
     try {
-      await dispatch(register(state)).unwrap();
+      await dispatch(register(formData)).unwrap();
       navigate('/');
     } catch (e) {
       console.log(e);
@@ -65,13 +85,13 @@ const Register = () => {
           <Grid item>
             <TextField
               required
-              label="Username"
-              name="username"
-              autoComplete="new-username"
-              value={state.username}
+              label="Email"
+              name="email"
+              autoComplete="new-email"
+              value={state.email}
               onChange={inputChangeHandler}
-              error={Boolean(getFieldError('username'))}
-              helperText={getFieldError('username')}
+              error={Boolean(getFieldError('email'))}
+              helperText={getFieldError('email')}
             />
           </Grid>
           <Grid item>
@@ -97,6 +117,11 @@ const Register = () => {
               onChange={inputChangeHandler}
               error={Boolean(getFieldError('displayName'))}
               helperText={getFieldError('displayName')}
+            />
+            <FileInput
+              onChange={fileInputChangeHandler}
+              name="avatar"
+              label="Upload avatar"
             />
           </Grid>
         </Grid>

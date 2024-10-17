@@ -8,11 +8,16 @@ export interface UserFields {
   avatar: string;
 }
 
+export interface Ingredient {
+  name: string;
+  amount: string;
+}
+
 export interface CocktailMutation {
   name: string;
   image: string | null;
   recipe: string;
-  ingredients: string[];
+  ingredients: Ingredient[];
   isPublished: boolean;
-  user: string;
+  user: string,
 }

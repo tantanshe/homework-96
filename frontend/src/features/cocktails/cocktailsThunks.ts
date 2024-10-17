@@ -29,14 +29,7 @@ export const fetchCocktailById = createAsyncThunk<Cocktail, string>(
 export const addCocktail = createAsyncThunk<Cocktail, Cocktail>(
   'cocktails/addCocktail',
   async (cocktailData) => {
-    const formData = new FormData();
-    formData.append('name', cocktailData.name);
-    formData.append('recipe', cocktailData.recipe);
-    formData.append('ingredients', JSON.stringify(cocktailData.ingredients));
-    if (cocktailData.image) {
-      formData.append('image', cocktailData.image);
-    }
-    const response = await axiosApi.post('/cocktails', formData);
+    const response = await axiosApi.post('/cocktails', cocktailData);
     return response.data;
   }
 );
